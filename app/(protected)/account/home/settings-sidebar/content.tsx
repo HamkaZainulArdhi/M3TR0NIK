@@ -41,8 +41,9 @@ export function AccountSettingsSidebarContent() {
   const { settings } = useSettings();
   const [sidebarSticky, setSidebarSticky] = useState(false);
 
-  // Initialize ref for parentEl
-  const parentRef = useRef<HTMLElement | Document>(document); // Default to document
+  // Initialize ref for parentEl. The document is only available on the client,
+  // so the effect below assigns the scroll container after mount.
+  const parentRef = useRef<HTMLElement | Document | null>(null);
   const scrollPosition = useScrollPosition({ targetRef: parentRef });
 
   // Effect to update parentRef after the component mounts

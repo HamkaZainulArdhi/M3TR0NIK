@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, MotionValue, useInView, useSpring, useTransform } from 'framer-motion';
+import { motion, MotionValue, useInView, useSpring, useTransform } from 'motion/react';
 
 function Digit({
   place,

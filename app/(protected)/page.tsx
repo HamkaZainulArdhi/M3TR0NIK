@@ -1,34 +1,26 @@
 'use client';
 
-import { useSettings } from '@/providers/settings-provider';
+import {
+  ACTIVE_DASHBOARD,
+  DASHBOARD_PAGE_BY_ID,
+} from '@/config/dashboard.config';
+import type { DashboardPageId } from '@/config/dashboard.config';
 import { Demo1LightSidebarPage } from './components/demo1';
 import { Demo2Page } from './components/demo2';
 import { Demo3Page } from './components/demo3';
 import { Demo4Page } from './components/demo4';
 import { Demo5Page } from './components/demo5';
 
-export default function Page() {
-  const { settings } = useSettings();
+const PAGES: Record<DashboardPageId, typeof Demo3Page> = {
+  demo1: Demo1LightSidebarPage,
+  demo2: Demo2Page,
+  demo3: Demo3Page,
+  demo4: Demo4Page,
+  demo5: Demo5Page,
+};
 
-  if (settings?.layout === 'demo1') {
-    return <Demo1LightSidebarPage />;
-  } else if (settings?.layout === 'demo2') {
-    return <Demo2Page />;
-  } else if (settings?.layout === 'demo3') {
-    return <Demo3Page />;
-  } else if (settings?.layout === 'demo4') {
-    return <Demo4Page />;
-  } else if (settings?.layout === 'demo5') {
-    return <Demo5Page />;
-  } else if (settings?.layout === 'demo6') {
-    return <Demo4Page />;
-  } else if (settings?.layout === 'demo7') {
-    return <Demo2Page />;
-  } else if (settings?.layout === 'demo8') {
-    return <Demo4Page />;
-  } else if (settings?.layout === 'demo9') {
-    return <Demo2Page />;
-  } else if (settings?.layout === 'demo10') {
-    return <Demo3Page />;
-  }
+export default function Page() {
+  const PageComponent = PAGES[DASHBOARD_PAGE_BY_ID[ACTIVE_DASHBOARD]];
+
+  return <PageComponent />;
 }

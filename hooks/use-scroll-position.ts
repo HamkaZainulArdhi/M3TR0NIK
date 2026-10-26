@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useState } from 'react';
 
 interface UseScrollPositionProps {
-  targetRef?: RefObject<HTMLElement | Document | undefined>; // Ref to the scrollable element
+  targetRef?: RefObject<HTMLElement | Document | null | undefined>; // Ref to the scrollable element
 }
 
 export function useScrollPosition({

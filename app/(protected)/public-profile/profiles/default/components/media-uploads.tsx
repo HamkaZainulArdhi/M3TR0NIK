@@ -2,9 +2,9 @@
 
 import { Fragment } from 'react';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
-import { ApexOptions } from 'apexcharts';
+import type { ApexOptions } from 'apexcharts';
 import { EllipsisVertical } from 'lucide-react';
-import ApexChart from 'react-apexcharts';
+import ApexChart from '@/components/ui/apex-chart';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 

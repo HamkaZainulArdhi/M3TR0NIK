@@ -1,9 +1,9 @@
 'use client';
 
 import { DropdownMenu7 } from '@/partials/dropdown-menu/dropdown-menu-7';
-import { ApexOptions } from 'apexcharts';
+import type { ApexOptions } from 'apexcharts';
 import { EllipsisVertical } from 'lucide-react';
-import ApexChart from 'react-apexcharts';
+import ApexChart from '@/components/ui/apex-chart';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 

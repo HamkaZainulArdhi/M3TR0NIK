@@ -14,11 +14,9 @@ import {
   UserCircle,
   Users,
 } from 'lucide-react';
-import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { useLanguage } from '@/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -238,16 +236,6 @@ export function UserDropdownMenu({ trigger }: { trigger: ReactNode }) {
             />
           </div>
         </DropdownMenuItem>
-        <div className="p-2 mt-1">
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full"
-            onClick={() => signOut()}
-          >
-            Logout
-          </Button>
-        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

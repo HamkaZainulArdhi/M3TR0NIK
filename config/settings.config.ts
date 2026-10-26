@@ -1,7 +1,8 @@
+import { ACTIVE_DASHBOARD } from './dashboard.config';
 import { Settings } from './types';
 
 export const APP_SETTINGS: Settings = {
-  layout: '',
+  layout: ACTIVE_DASHBOARD,
   container: 'fixed',
   layouts: {
     demo1: {

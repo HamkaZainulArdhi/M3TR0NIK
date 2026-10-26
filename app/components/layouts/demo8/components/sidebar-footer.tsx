@@ -37,7 +37,7 @@ export function SidebarFooter() {
 
       <UserDropdownMenu
         trigger={
-          <img``
+          <img
             className="size-8 rounded-lg border-2 border-mono/30 shrink-0 cursor-pointer"
             src={toAbsoluteUrl('/media/avatars/300-2.png')}
             alt="User Avatar"

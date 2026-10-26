@@ -1,12 +1,14 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { I18nextProvider } from 'react-i18next';
-import { DirectionProvider as RadixDirectionProvider } from '@radix-ui/react-direction';
+import {
+  I18nextProvider,
+  useTranslation as useI18nextTranslation,
+} from 'react-i18next';
+import { Direction } from 'radix-ui';
 import { I18N_LANGUAGES } from '@/i18n/config';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 // Import translation files
 import enTranslations from '@/i18n/messages/en.json';
@@ -15,67 +17,60 @@ import esTranslations from '@/i18n/messages/es.json';
 import deTranslations from '@/i18n/messages/de.json';
 import chTranslations from '@/i18n/messages/ch.json';
 
+const resources = {
+  en: { translation: enTranslations },
+  ar: { translation: arTranslations },
+  es: { translation: esTranslations },
+  de: { translation: deTranslations },
+  ch: { translation: chTranslations },
+};
+
+// Initialize synchronously so server-rendered client components always have an
+// i18next instance. Language detection runs on the client after hydration.
+if (!i18n.isInitialized) {
+  i18n.use(initReactI18next).init({
+    resources,
+    lng: 'en',
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+    initImmediate: false,
+  });
+}
+
 interface I18nProviderProps {
   children: ReactNode;
 }
 
 function I18nProvider({ children }: I18nProviderProps) {
-  const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
 
   useEffect(() => {
-    // Initialize i18n only on client side
-    if (!i18n.isInitialized) {
-      const resources = {
-        en: { translation: enTranslations },
-        ar: { translation: arTranslations },
-        es: { translation: esTranslations },
-        de: { translation: deTranslations },
-        ch: { translation: chTranslations },
-      };
+    const storedLanguage = window.localStorage.getItem('language');
+    const browserLanguage = navigator.language.split('-')[0];
+    const detectedLanguage = storedLanguage || browserLanguage;
+    const isSupported = I18N_LANGUAGES.some(
+      (language) => language.code === detectedLanguage,
+    );
 
-      i18n
-        .use(LanguageDetector)
-        .use(initReactI18next)
-        .init({
-          resources,
-          fallbackLng: 'en',
-          debug: process.env.NODE_ENV === 'development',
-
-          interpolation: {
-            escapeValue: false, // React already does escaping
-          },
-
-          detection: {
-            order: ['localStorage', 'navigator', 'htmlTag'],
-            caches: ['localStorage'],
-            lookupLocalStorage: 'language',
-          },
-
-          react: {
-            useSuspense: false, // Important for Next.js SSR
-          },
-        })
-        .then(() => {
-          setIsI18nInitialized(true);
-        });
-    } else {
-      setIsI18nInitialized(true);
+    if (isSupported && detectedLanguage !== i18n.language) {
+      i18n.changeLanguage(detectedLanguage);
     }
 
-    // Update document direction when language changes
-    const handleLanguageChange = (lng: string) => {
-      const language = I18N_LANGUAGES.find((lang) => lang.code === lng);
-      if (language?.direction) {
-        document.documentElement.setAttribute('dir', language.direction);
-      }
+    const handleLanguageChange = (languageCode: string) => {
+      const language =
+        I18N_LANGUAGES.find((item) => item.code === languageCode) ||
+        I18N_LANGUAGES[0];
+
+      setDirection(language.direction);
+      document.documentElement.setAttribute('dir', language.direction);
     };
 
-    // Set initial direction
-    if (i18n.language) {
-      handleLanguageChange(i18n.language);
-    }
-
-    // Listen for language changes
+    handleLanguageChange(i18n.language);
     i18n.on('languageChanged', handleLanguageChange);
 
     return () => {
@@ -83,36 +78,27 @@ function I18nProvider({ children }: I18nProviderProps) {
     };
   }, []);
 
-  // Get current language for direction
-  const currentLanguage = I18N_LANGUAGES.find((lang) => lang.code === (i18n.language || 'en')) || I18N_LANGUAGES[0];
-
-  // Don't render until i18n is initialized
-  if (!isI18nInitialized) {
-    return (
-      <RadixDirectionProvider dir="ltr">
-        {children}
-      </RadixDirectionProvider>
-    );
-  }
-
   return (
     <I18nextProvider i18n={i18n}>
-      <RadixDirectionProvider dir={currentLanguage.direction}>
+      <Direction.DirectionProvider dir={direction}>
         {children}
-      </RadixDirectionProvider>
+      </Direction.DirectionProvider>
     </I18nextProvider>
   );
 }
 
 const useLanguage = () => {
-  const currentLanguage = I18N_LANGUAGES.find((lang) => lang.code === i18n.language) || I18N_LANGUAGES[0];
+  const { i18n: instance } = useI18nextTranslation();
+  const currentLanguage =
+    I18N_LANGUAGES.find((language) => language.code === instance.language) ||
+    I18N_LANGUAGES[0];
 
   const changeLanguage = (code: string) => {
-    i18n.changeLanguage(code);
+    instance.changeLanguage(code);
   };
 
   return {
-    languageCode: i18n.language,
+    languageCode: instance.language,
     language: currentLanguage,
     changeLanguage,
   };

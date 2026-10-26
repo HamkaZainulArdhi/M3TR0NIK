@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ApexOptions } from 'apexcharts';
-import ApexChart from 'react-apexcharts';
+import type { ApexOptions } from 'apexcharts';
+import ApexChart from '@/components/ui/apex-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {

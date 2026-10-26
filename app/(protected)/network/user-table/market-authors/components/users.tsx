@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Rating } from '@/partials/common/rating';
-import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { RiCheckboxCircleFill } from '@remixicon/react';
 import {
   ColumnDef,

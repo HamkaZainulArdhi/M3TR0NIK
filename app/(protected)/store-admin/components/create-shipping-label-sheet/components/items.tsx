@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Label } from '@radix-ui/react-label';
+import { Label } from '@/components/ui/label';
 import { Badge, BadgeDot } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

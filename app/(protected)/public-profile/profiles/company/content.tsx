@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import {
   RiFacebookCircleLine,
   RiTwitterXLine,
@@ -10,16 +11,18 @@ import { Connections } from '@/app/(protected)/public-profile/profiles/default/c
 import { Contributions } from '@/app/(protected)/public-profile/profiles/default/components/contributions';
 import { Projects } from '@/app/(protected)/public-profile/profiles/default/components/projects';
 import { Tags } from '@/app/(protected)/public-profile/profiles/default/components/tags';
-import {
-  CompanyProfile,
-  Highlights,
-  INetworkItems,
-  IStatisticsItems,
-  Locations,
-  Network,
-  OpenJobs,
-  Statistics,
-} from './components';
+import { Highlights } from './components/highlights';
+import { Locations } from './components/locations';
+import { Network } from './components/network';
+import type { INetworkItems } from './components/network';
+import { OpenJobs } from './components/open-jobs';
+import { Statistics } from './components/statistics';
+import type { IStatisticsItems } from './components/statistics';
+
+const CompanyProfile = dynamic(
+  () => import('./components/company-profile').then((module) => module.CompanyProfile),
+  { ssr: false },
+);
 
 export function ProfileCompanyContent() {
   const items: IStatisticsItems = [
